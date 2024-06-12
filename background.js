@@ -13,10 +13,17 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
       func: function() {
         return { url: window.location.href };
       }
-     }, (results) => {
+    }, (results) => {
       if (results && results[0] && results[0].result) {
         const recipeURL = results[0].result.url;
-        chrome.storage.local.set({ recipeURL: recipeURL });
+        chrome.storage.local.set({ recipeURL: recipeURL }, () => {
+          chrome.windows.create({
+            url: chrome.runtime.getURL("popup.html"),
+            type: "popup",
+            width: 500,
+            height: 600
+          });
+        });
       }
     });
   }
