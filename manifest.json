@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "Recipe Remixer",
+  "version": "1.0",
+  "description": "Modify recipes to match dietary preferences.",
+  "permissions": [
+    "contextMenus",
+    "activeTab",
+    "storage",
+    "scripting"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+    "48": "icon/icon48.png",
+    "128": "icon/icon128.png"
+  }
+}

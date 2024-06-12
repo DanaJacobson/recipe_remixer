@@ -1,4 +1,5 @@
 import os
+import sys
 from dotenv import load_dotenv
 from scrapegraphai.graphs import SmartScraperGraph
 import json
@@ -112,28 +113,20 @@ def compress_image(image_url, output_path):
     
     return output_path
 
-# Get the URL from the user
-user_url = input("Please enter the recipe URL: ")
-# Run the scraper with the provided URL
-scraped_data = run_scraper(user_url)
-print("This is the original recipe:\n")
-print(scraped_data)
-print("\n")
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        print("Usage: python main.py <recipe_url>")
+        sys.exit(1)
 
-user_request = input("Please enter your request for modifying the recipe: ")
+    user_url = sys.argv[1]
+    scraped_data = run_scraper(user_url)
+    print("This is the original recipe:\n")
+    print(scraped_data)
+    print("\n")
+
+    user_request = input("Please enter your request for modifying the recipe: ")
 
 # Modify the recipe using GPT-3.5
 modified_recipe = modify_recipe(scraped_data, user_request)
 print("Modified Recipe:\n")
 print(modified_recipe)
-image_url = generate_dish_image(modified_recipe)
-#print("image of the modified dish:\n")
-#print(image_url)
-
-if image_url:
-    # Compress the image
-    compressed_image_path = compress_image(image_url, "compressed_image.png")
-    print(f"Compressed image saved as '{compressed_image_path}'")
-
-else:
-    print("Could not generate the image. Dish name or ingredients are missing.")
