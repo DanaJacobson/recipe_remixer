@@ -1,10 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+  <meta charset="UTF-8">
+  <title>Recipe Remixer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      width: 300px;
+      padding: 10px;
+    }
+    h1 {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+    .diet-option {
+      margin: 10px 0;
+    }
+  </style>
 </head>
 <body>
-
+  <h1>Recipe Remixer</h1>
+  <form id="diet-form">
+    <div class="diet-option">
+      <input type="radio" id="vegan" name="diet" value="vegan">
+      <label for="vegan">Vegan</label>
+    </div>
+      <div class="diet-option">
+      <input type="radio" id="vegetarian" name="diet" value="vegetarian">
+      <label for="vegetarian">Vegetarian</label>
+    </div>
+    <div class="diet-option">
+      <input type="radio" id="gluten-free" name="diet" value="gluten-free">
+      <label for="gluten-free">Gluten-Free</label>
+    </div>
+    <div class="diet-option">
+      <input type="radio" id="kosher" name="diet" value="kosher">
+      <label for="kosher">Kosher</label>
+    </div>
+      <div class="diet-option">
+      <input type="radio" id="low-sodium" name="diet" value="low-sodium">
+      <label for="low-sodium">Low-sodium</label>
+    </div>
+    <button type="submit">Submit</button>
+  </form>
+  <script src="popup.js"></script>
 </body>
 </html>

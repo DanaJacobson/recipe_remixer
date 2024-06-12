@@ -107,13 +107,15 @@ def generate_dish_image(modified_recipe):
         print("Error generating image:", response)
         return None
 
+
 # Function to compress the image from URL
 def compress_image(image_url, output_path):
     # Compress the image using TinyPNG
     source = tinify.from_url(image_url)
     source.to_file(output_path)
-    
+
     return output_path
+
 
 app = Flask(__name__)
 
@@ -149,7 +151,9 @@ def receive_url():
             # Displaying the image path
             absolute_path = os.path.abspath(compressed_image_path)
             print(f"Image available at: {absolute_path}")
+
             print(f"To view the image, open the following path in an image viewer: {absolute_path}")
+
         else:
             print("Could not generate the image. Dish name or ingredients are missing.")
             compressed_image_path = None
@@ -163,9 +167,9 @@ def receive_url():
         response.headers["Access-Control-Allow-Origin"] = "*"
         return response
 
-    response = make_response('No URL or request provided', 400)
-    response.headers["Access-Control-Allow-Origin"] = "*"
-    return response
+        response = make_response('No URL or request provided', 400)
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        return response
 
 if __name__ == '__main__':
     app.run(port=5000)

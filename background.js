@@ -13,23 +13,18 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
       func: function() {
         return { url: window.location.href };
       }
-    }, (results) => {
+     }, (results) => {
       if (results && results[0] && results[0].result) {
         const recipeURL = results[0].result.url;
-        chrome.scripting.executeScript({
-          target: { tabId: tab.id },
-          func: function() {
-            const userRequest = prompt("Enter your request (e.g., vegan, gluten-free, etc.):");
-            return userRequest;
-          }
-        }, (requestResults) => {
-          if (requestResults && requestResults[0] && requestResults[0].result) {
-            const userRequest = requestResults[0].result;
-            sendURLToServer(recipeURL, userRequest);
-          }
-        });
+        chrome.storage.local.set({ recipeURL: recipeURL });
       }
     });
+  }
+});
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.type === 'sendRequest') {
+    const { url, userRequest } = message.data;
+    sendURLToServer(url, userRequest);
   }
 });
 
