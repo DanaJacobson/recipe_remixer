@@ -1,4 +1,5 @@
 import os
+import sys
 from dotenv import load_dotenv
 from scrapegraphai.graphs import SmartScraperGraph
 import json
@@ -68,17 +69,34 @@ def modify_recipe(recipe_data, user_request):
     return modified_recipe
 
 
-# Get the URL from the user
-user_url = input("Please enter the recipe URL: ")
-# Run the scraper with the provided URL
-scraped_data = run_scraper(user_url)
-print("This is the original recipe:\n")
-print(scraped_data)
-print("\n")
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        print("Usage: python main.py <recipe_url>")
+        sys.exit(1)
 
-user_request = input("Please enter your request for modifying the recipe: ")
+    user_url = sys.argv[1]
+    scraped_data = run_scraper(user_url)
+    print("This is the original recipe:\n")
+    print(scraped_data)
+    print("\n")
 
-# Modify the recipe using GPT-3.5
-modified_recipe = modify_recipe(scraped_data, user_request)
-print("Modified Recipe:\n")
-print(modified_recipe)
+    user_request = input("Please enter your request for modifying the recipe: ")
+
+    modified_recipe = modify_recipe(scraped_data, user_request)
+    print("Modified Recipe:\n")
+    print(modified_recipe)
+
+# # Get the URL from the user
+# user_url = input("Please enter the recipe URL: ")
+# # Run the scraper with the provided URL
+# scraped_data = run_scraper(user_url)
+# print("This is the original recipe:\n")
+# print(scraped_data)
+# print("\n")
+#
+# user_request = input("Please enter your request for modifying the recipe: ")
+#
+# # Modify the recipe using GPT-3.5
+# modified_recipe = modify_recipe(scraped_data, user_request)
+# print("Modified Recipe:\n")
+# print(modified_recipe)
