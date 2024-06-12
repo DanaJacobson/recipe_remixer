@@ -40,13 +40,14 @@ def run_scraper(url):
     return result
 
 
-def modify_recipe(recipe_data, user_request):
+def modify_recipe(recipe_data, user_requests):
+    user_requests_str = ", ".join(user_requests)
     prompt = f"""
     You are a culinary expert. Here is a recipe I scraped:
 
     {json.dumps(recipe_data, indent=2)}
 
-    The user has requested the following changes: {user_request}
+    The user has requested the following changes: {user_requests_str}
     Please provide a whole recipe, modified with proper alternative for the problematic ingredients. 
     Please provide the modified recipe in the same JSON format.
     For example, if the recipe includes cheese and the user request to change the recipe to vegan, give an alternative for the cheese.
@@ -130,14 +131,14 @@ def receive_url():
 
     data = request.get_json()
     url = data.get('url')
-    user_request = data.get('request')
-    if url and user_request:
+    user_requests = data.get('request')
+    if url and user_requests:
         print(f"Received URL: {url}")
-        print(f"User Request: {user_request}")
+        print(f"User Requests: {user_requests}")
         
         # Run the scraper and modify the recipe
         scraped_data = run_scraper(url)
-        modified_recipe = modify_recipe(scraped_data, user_request)
+        modified_recipe = modify_recipe(scraped_data, user_requests)
         print("Modified Recipe:\n", modified_recipe)
         
         # Generate image URL

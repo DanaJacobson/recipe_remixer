@@ -1,11 +1,27 @@
 document.addEventListener('DOMContentLoaded', () => {
   console.log('Popup loaded'); // Log when the popup is loaded
 
+  const checkboxes = document.querySelectorAll('input[name="diet"]');
+  checkboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', handleCheckboxChange);
+  });
+
   document.getElementById('diet-form').addEventListener('submit', function(event) {
     event.preventDefault();
 
-    const selectedDiet = document.querySelector('input[name="diet"]:checked').value;
-    console.log('Selected Diet:', selectedDiet); // Log the selected dietary option
+    const selectedDiets = [];
+    checkboxes.forEach(checkbox => {
+      if (checkbox.checked) {
+        selectedDiets.push(checkbox.value);
+      }
+    });
+
+    if (selectedDiets.length < 1 || selectedDiets.length > 2) {
+      alert('Please select one or two options only.');
+      return;
+    }
+
+    console.log('Selected Diets:', selectedDiets); // Log the selected dietary options
 
     chrome.storage.local.get('recipeURL', (data) => {
       const recipeURL = data.recipeURL;
@@ -14,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (recipeURL) {
         chrome.runtime.sendMessage({
           type: 'sendRequest',
-          data: { url: recipeURL, userRequest: selectedDiet }
+          data: { url: recipeURL, userRequest: selectedDiets }
         }, (response) => {
           console.log('Message sent to background script', response); // Log when the message is sent to the background script
         });
@@ -23,4 +39,19 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
+
+  function handleCheckboxChange() {
+    const selectedCheckboxes = Array.from(checkboxes).filter(checkbox => checkbox.checked);
+    if (selectedCheckboxes.length >= 2) {
+      checkboxes.forEach(checkbox => {
+        if (!checkbox.checked) {
+          checkbox.disabled = true;
+        }
+      });
+    } else {
+      checkboxes.forEach(checkbox => {
+        checkbox.disabled = false;
+      });
+    }
+  }
 });
