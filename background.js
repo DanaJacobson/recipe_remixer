@@ -28,27 +28,38 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     });
   }
 });
+
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'sendRequest') {
     const { url, userRequest } = message.data;
-    sendURLToServer(url, userRequest);
+    sendURLToServer(url, userRequest).then(response => {
+      sendResponse(response);
+    }).catch(error => {
+      sendResponse({ success: false, error: error.message });
+    });
+    return true; // Indicates that we will respond asynchronously
   }
 });
 
-function sendURLToServer(url, userRequest) {
-  fetch('http://127.0.0.1:5000/receive_url', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ url: url, request: userRequest })
-  }).then(response => {
+async function sendURLToServer(url, userRequest) {
+  try {
+    const response = await fetch('http://127.0.0.1:5000/receive_url', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ url: url, request: userRequest })
+    });
+
     if (response.ok) {
       console.log('URL and request sent to server successfully');
+      return { success: true };
     } else {
       console.error('Failed to send URL and request to server');
+      return { success: false, error: 'Failed to send URL and request to server' };
     }
-  }).catch(error => {
+  } catch (error) {
     console.error('Error:', error);
-  });
+    return { success: false, error: error.message };
+  }
 }
