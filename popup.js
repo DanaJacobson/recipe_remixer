@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
       console.log('Recipe URL:', recipeURL); // Log the retrieved recipe URL from storage
 
       if (recipeURL) {
+        openLoadingWindow();
         chrome.runtime.sendMessage({
           type: 'sendRequest',
           data: { url: recipeURL, userRequest: selectedDiets }
@@ -53,5 +54,16 @@ document.addEventListener('DOMContentLoaded', () => {
         checkbox.disabled = false;
       });
     }
+  }
+
+  function openLoadingWindow() {
+    chrome.windows.create({
+      url: chrome.runtime.getURL("loading.html"),
+      type: "popup",
+      width: 500,
+      height: 600
+    }, () => {
+      window.close();
+    });
   }
 });

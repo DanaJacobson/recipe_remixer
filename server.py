@@ -87,7 +87,7 @@ def flatten_ingredients(ingredients_list):
             flat_ingredients.append(item)
     return flat_ingredients
 
-# Function to generate an image using DALL-E 2
+#Function to generate an image using DALL-E 2
 def generate_dish_image(modified_recipe):
     dish_name = modified_recipe.get("Name of the dish", "")
     ingredients = modified_recipe.get("List of ingredients", [])
@@ -109,12 +109,12 @@ def generate_dish_image(modified_recipe):
         print("Error generating image. The response did not contain a valid URL.")
         return None
 
-# Function to compress the image from URL
+#Function to compress the image from URL
 def compress_image(image_url, output_path):
     # Compress the image using TinyPNG
     source = tinify.from_url(image_url)
     source.to_file(output_path)
-    
+
     return output_path
 
 app = Flask(__name__)
@@ -146,7 +146,7 @@ def receive_url():
             #print(f"Generated Image URL: {image_url}") #for testing
             # Compress the image
             compressed_image_path = compress_image(image_url, "compressed_image.png")
-            
+
             # Displaying the image path
             absolute_path = os.path.abspath(compressed_image_path)
             print(f"Image available at: {absolute_path}")
@@ -156,8 +156,8 @@ def receive_url():
             compressed_image_path = None
 
         response_data = {
-            "modified_recipe": modified_recipe,
-            "compressed_image_path": compressed_image_path
+             "modified_recipe": modified_recipe
+             "compressed_image_path": compressed_image_path
         }
         
         response = make_response(jsonify(response_data), 200)

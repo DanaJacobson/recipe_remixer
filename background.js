@@ -32,6 +32,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'sendRequest') {
     const { url, userRequest } = message.data;
+    console.log('Received message in background script:', message); // Log the received message
     sendURLToServer(url, userRequest).then(response => {
       sendResponse(response);
     }).catch(error => {
