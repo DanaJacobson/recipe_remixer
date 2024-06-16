@@ -9,7 +9,7 @@ from flask import Flask, request, jsonify, make_response
 
 load_dotenv()
 
-OPENAI_API_KEY = "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"
+OPENAI_API_KEY = "sk-proj-cKlHZWTLnw3x3xCCa57oT3BlbkFJVFvsHVlzbbkI7DB8vjbr"
 client = openai.OpenAI(api_key=OPENAI_API_KEY)
 tinify.key = "48dwhSBSx7zbMzZkX9kT8pj6rkmwcmCJ"
 
@@ -19,6 +19,7 @@ graph_config = {
         "model": "gpt-3.5-turbo",
     },
 }
+
 
 # Function to run the scraper
 def run_scraper(url):
@@ -73,8 +74,9 @@ def modify_recipe(recipe_data, user_request):
         modified_recipe_json = json.loads(modified_recipe)
     except json.JSONDecodeError:
         modified_recipe_json = {"error": "The response could not be parsed as JSON. Please try again."}
-    
+
     return modified_recipe_json
+
 
 # Function to flatten the ingredients list
 def flatten_ingredients(ingredients_list):
@@ -87,7 +89,8 @@ def flatten_ingredients(ingredients_list):
             flat_ingredients.append(item)
     return flat_ingredients
 
-#Function to generate an image using DALL-E 2
+
+# Function to generate an image using DALL-E 2
 def generate_dish_image(modified_recipe):
     dish_name = modified_recipe.get("Name of the dish", "")
     ingredients = modified_recipe.get("List of ingredients", [])
@@ -101,7 +104,7 @@ def generate_dish_image(modified_recipe):
         n=1,
         size="1024x1024"
     )
-    
+
     if response.data and len(response.data) > 0 and response.data[0].url:
         image_url = response.data[0].url
         return image_url
@@ -109,7 +112,8 @@ def generate_dish_image(modified_recipe):
         print("Error generating image. The response did not contain a valid URL.")
         return None
 
-#Function to compress the image from URL
+
+# Function to compress the image from URL
 def compress_image(image_url, output_path):
     # Compress the image using TinyPNG
     source = tinify.from_url(image_url)
@@ -117,7 +121,9 @@ def compress_image(image_url, output_path):
 
     return output_path
 
+
 app = Flask(__name__)
+
 
 @app.route('/receive_url', methods=['OPTIONS', 'POST'])
 def receive_url():
@@ -134,16 +140,16 @@ def receive_url():
     if url and user_request:
         print(f"Received URL: {url}")
         print(f"User Request: {user_request}")
-        
+
         # Run the scraper and modify the recipe
         scraped_data = run_scraper(url)
         modified_recipe = modify_recipe(scraped_data, user_request)
         print("Modified Recipe:\n", modified_recipe)
-        
+
         # Generate image URL
         image_url = generate_dish_image(modified_recipe)
         if image_url:
-            #print(f"Generated Image URL: {image_url}") #for testing
+            print(f"Generated Image URL: {image_url}") #for testing
             # Compress the image
             compressed_image_path = compress_image(image_url, "compressed_image.png")
 
@@ -156,10 +162,10 @@ def receive_url():
             compressed_image_path = None
 
         response_data = {
-             "modified_recipe": modified_recipe
-             "compressed_image_path": compressed_image_path
+            "modified_recipe": modified_recipe,
+            "compressed_image_path": compressed_image_path
         }
-        
+
         response = make_response(jsonify(response_data), 200)
         response.headers["Access-Control-Allow-Origin"] = "*"
         return response
@@ -167,6 +173,7 @@ def receive_url():
     response = make_response('No URL or request provided', 400)
     response.headers["Access-Control-Allow-Origin"] = "*"
     return response
+
 
 if __name__ == '__main__':
     app.run(port=5000)
