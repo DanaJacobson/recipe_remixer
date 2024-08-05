@@ -125,6 +125,14 @@ def compress_image(image_url, output_path):
 app = Flask(__name__)
 
 
+@app.after_request
+def apply_cors(response):
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+    response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+    return response
+
+
 @app.route('/receive_url', methods=['OPTIONS', 'POST'])
 def receive_url():
     if request.method == 'OPTIONS':
@@ -134,45 +142,52 @@ def receive_url():
         response.headers["Access-Control-Allow-Headers"] = "Content-Type"
         return response
 
-    data = request.get_json()
-    url = data.get('url')
-    user_request = data.get('request')
-    if url and user_request:
-        print(f"Received URL: {url}")
-        print(f"User Request: {user_request}")
+    try:
+        data = request.get_json()
+        url = data.get('url')
+        user_request = data.get('request')
+        if url and user_request:
+            print(f"Received URL: {url}")
+            print(f"User Request: {user_request}")
 
-        # Run the scraper and modify the recipe
-        scraped_data = run_scraper(url)
-        modified_recipe = modify_recipe(scraped_data, user_request)
-        print("Modified Recipe:\n", modified_recipe)
+            # Run the scraper and modify the recipe
+            scraped_data = run_scraper(url)
+            modified_recipe = modify_recipe(scraped_data, user_request)
+            print("Modified Recipe:\n", modified_recipe)
 
-        # Generate image URL
-        image_url = generate_dish_image(modified_recipe)
-        if image_url:
-            print(f"Generated Image URL: {image_url}") #for testing
-            # Compress the image
-            compressed_image_path = compress_image(image_url, "compressed_image.png")
+            # Generate image URL
+            image_url = generate_dish_image(modified_recipe)
+            if image_url:
+                print(f"Generated Image URL: {image_url}") #for testing
+                # Compress the image
+                compressed_image_path = compress_image(image_url, "compressed_image.png")
 
-            # Displaying the image path
-            absolute_path = os.path.abspath(compressed_image_path)
-            print(f"Image available at: {absolute_path}")
-            print(f"To view the image, open the following path in an image viewer: {absolute_path}")
-        else:
-            print("Could not generate the image. Dish name or ingredients are missing.")
-            compressed_image_path = None
+                # Displaying the image path
+                absolute_path = os.path.abspath(compressed_image_path)
+                print(f"Image available at: {absolute_path}")
+                print(f"To view the image, open the following path in an image viewer: {absolute_path}")
+            else:
+                print("Could not generate the image. Dish name or ingredients are missing.")
+                compressed_image_path = None
 
-        response_data = {
-            "modified_recipe": modified_recipe,
-            "compressed_image_path": compressed_image_path
-        }
+            response_data = {
+                "modified_recipe": modified_recipe,
+                "compressed_image_path": compressed_image_path
+            }
 
-        response = make_response(jsonify(response_data), 200)
+            response = make_response(jsonify(response_data), 200)
+            response.headers["Access-Control-Allow-Origin"] = "*"
+            return response
+
+        response = make_response('No URL or request provided', 400)
         response.headers["Access-Control-Allow-Origin"] = "*"
         return response
 
-    response = make_response('No URL or request provided', 400)
-    response.headers["Access-Control-Allow-Origin"] = "*"
-    return response
+    except Exception as e:
+        print("Error processing request:", str(e))
+        response = make_response('Internal Server Error', 500)
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        return response
 
 
 if __name__ == '__main__':

@@ -7,7 +7,12 @@
     "contextMenus",
     "activeTab",
     "storage",
-    "scripting"
+    "scripting",
+    "tabs",
+    "windows"
+  ],
+  "host_permissions": [
+  "http://127.0.0.1/*"
   ],
   "background": {
     "service_worker": "background.js"
@@ -27,7 +32,7 @@
   },
   "web_accessible_resources": [
     {
-      "resources": ["loading.html", "loading.js"],
+      "resources": ["loading.html", "loading.js", "recipe.html" , "recipe.js"],
       "matches": ["<all_urls>"]
     }
   ]
