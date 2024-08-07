@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
       recipeElement.appendChild(ingredientsTitle);
 
       const ingredients = modifiedRecipe['List of ingredients'];
-      if (ingredients) {
+      if (Array.isArray(ingredients)) {
         const ingredientsList = document.createElement('ul');
         ingredients.forEach(ingredient => {
           const li = document.createElement('li');
