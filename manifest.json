@@ -32,7 +32,7 @@
   },
   "web_accessible_resources": [
     {
-      "resources": ["loading.html", "loading.js", "recipe.html" , "recipe.js"],
+      "resources": ["loading.html", "loading.js", "recipe.html", "recipe.js", "library.html", "library.js", "background.js", "viewRecipe.js", "viewRecipe.html" ],
       "matches": ["*://*/*"]
     }
   ]
