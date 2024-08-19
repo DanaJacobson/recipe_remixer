@@ -24,7 +24,7 @@
             max-width: 600px;
             text-align: center;
             overflow-y: auto;
-            max-height: 100vh;
+            max-height: 80vh;
             padding-bottom: 100px;
         }
         h1 {
@@ -54,8 +54,28 @@
             border-radius: 10px;
             margin-top: 20px;
         }
-        button {
+        textarea {
+            width: 100%;
+            height: 100px;
             margin-top: 20px;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+        }
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        #saveComment {
+            margin-bottom: 10px;
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        #backToLibrary {
             padding: 10px 20px;
             font-size: 16px;
             cursor: pointer;
@@ -67,7 +87,11 @@
         <h1>Recipe</h1>
         <div class="recipe" id="recipe"></div>
         <img src="compressed_image.png" alt="Recipe Image">
-        <button id="backToLibrary">Back to Library</button>
+        <textarea id="comment" placeholder="Add your comment here:"></textarea>
+        <div class="button-container">
+            <button id="saveComment">Save Comment</button>
+            <button id="backToLibrary">Back to Library</button>
+        </div>
     </div>
     <script src="viewRecipe.js"></script>
 </body>
