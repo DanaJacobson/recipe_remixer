@@ -31,8 +31,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     // Alert the user
                     alert('Comment saved!');
-
-                    // Scroll to the bottom of the recipe to show the comment
                     document.getElementById('recipe').scrollIntoView(false);
                 });
             });
