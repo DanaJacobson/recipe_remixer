@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (Array.isArray(instructions)) {
                 instructions.forEach((step, index) => {
                     const stepTitle = document.createElement('h3');
-                    stepTitle.textContent = `Step ${index + 1}:`;
+                    stepTitle.textContent = `Step ${index + 2}:`;
                     container.appendChild(stepTitle);
     
                     const stepContent = document.createElement('p');

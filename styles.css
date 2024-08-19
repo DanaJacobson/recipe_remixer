@@ -1,0 +1,232 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Montserrat:wght@400;700&family=Lobster&display=swap');
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg, #fff5e6 0%, #ffe0b3 100%);
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  .container {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 350px;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(-10px);
+    animation: fadeIn 0.5s ease forwards;
+  }
+  @keyframes fadeIn {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  h1 {
+    font-family: 'Lobster', cursive;
+    font-size: 28px;
+    margin-bottom: 15px;
+    color: #e65c00;
+  }
+  h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    margin-bottom: 25px;
+    color: #ff6600;
+  }
+  h3 {
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: #cc5200;
+  }
+  .diet-option {
+    margin: 15px 0;
+    display: flex;
+    align-items: center;
+    background-color: #ffe6cc;
+    padding: 10px 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  }
+  .diet-option label {
+    margin-left: 10px;
+    font-size: 16px;
+    color: #b34700;
+    cursor: pointer;
+  }
+  .diet-option input[type="checkbox"] {
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: #fff;
+    border: 2px solid #ff6600;
+    padding: 10px;
+    border-radius: 5px;
+    display: inline-block;
+    position: relative;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+  }
+  .diet-option input[type="checkbox"]:checked {
+    background-color: #ff6600;
+    border-color: #ff6600;
+  }
+  .diet-option input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+  button {
+    background-color: #ff6600;
+    color: #ffffff;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 18px;
+    margin-top: 30px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  button:hover {
+    background-color: #e65c00;
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(230, 92, 0, 0.5);
+  }
+
+  /* Specific styles for the recipe page */
+  .recipe-content {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .recipe-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 10px;
+    object-fit: cover; /* Ensures the image fills the square without distortion */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  }
+
+  .recipe-text {
+    flex: 1;
+    margin-left: 20px;
+    text-align: left;
+    overflow-y: auto;
+    max-height: 300px; /* Set max height to control the scroll */
+  }
+
+  .instructions-container {
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    text-align: left;
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  ul {
+    list-style-type: disc;
+    margin-left: 20px;
+    padding-left: 20px;
+    color: #cc5200;
+  }
+
+  p {
+    margin-bottom: 20px;
+    color: #cc5200;
+  }
+
+/* HTML: <div class="loader"></div> */
+.loader {
+    width: 35px;
+    height: 80px;
+    position: relative;
+    margin: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -30%); /* Center the loader */
+  }
+  .loader:after {
+    content: "";
+    position: absolute;
+    inset: 0 0 20px;
+    border-radius: 50px 50px 10px 10px;
+    padding: 1px;
+    background: linear-gradient(#ff4d80 33%,#ffa104 0 66%, #01ddc7 0) content-box;
+    --c:radial-gradient(farthest-side,#000 94%,#0000);
+    -webkit-mask:
+      linear-gradient(#0000 0 0),
+      var(--c) -10px -10px,
+      var(--c)  15px -14px,
+      var(--c)   9px -6px,
+      var(--c) -12px  9px,
+      var(--c)  14px  9px,
+      var(--c)  23px 27px,
+      var(--c)  -8px 35px,
+      var(--c)   50% 50%,
+      linear-gradient(#000 0 0);
+    mask:
+      linear-gradient(#000 0 0),
+      var(--c) -10px -10px,
+      var(--c)  15px -14px,
+      var(--c)   9px -6px,
+      var(--c) -12px  9px,
+      var(--c)  14px  9px,
+      var(--c)  23px 27px,
+      var(--c)  -8px 35px,
+      var(--c)   50% 50%,
+      linear-gradient(#0000 0 0);
+    -webkit-mask-composite: destination-out;
+    mask-composite: exclude,add,add,add,add,add,add,add,add;
+    -webkit-mask-repeat: no-repeat;
+    animation: l3 3s infinite ;
+  }
+  .loader:before {
+    content: "";
+    position: absolute;
+    inset: 50% calc(50% - 4px) 0;
+    background: #e0a267;
+    border-radius: 50px;
+  }
+  @keyframes l3 {
+   0%   {-webkit-mask-size: auto,0 0,0 0,0 0,0 0,0 0,0 0,0 0,0 0}
+   10%  {-webkit-mask-size: auto,25px 25px,0 0,0 0,0 0,0 0,0 0,0 0,0 0}
+   20%  {-webkit-mask-size: auto,25px 25px,25px 25px,0 0,0 0,0 0,0 0,0 0,0 0}
+   30%  {-webkit-mask-size: auto,25px 25px,25px 25px,30px 30px,0 0,0 0,0 0,0 0,0 0}
+   40%  {-webkit-mask-size: auto,25px 25px,25px 25px,30px 30px,30px 30px,0 0,0 0,0 0,0 0}
+   50%  {-webkit-mask-size: auto,25px 25px,25px 25px,30px 30px,30px 30px,25px 25px,0 0,0 0,0 0}
+   60%  {-webkit-mask-size: auto,25px 25px,25px 25px,30px 30px,30px 30px,25px 25px,25px 25px,0 0,0 0}
+   70%  {-webkit-mask-size: auto,25px 25px,25px 25px,30px 30px,30px 30px,25px 25px,25px 25px,25px 25px,0 0}
+   80%,
+   100% {-webkit-mask-size: auto,25px 25px,25px 25px,30px 30px,30px 30px,25px 25px,25px 25px,25px 25px,200% 200%}
+  }
+
+  /* Wrapper or parent container */
+.loader-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full height of the viewport */
+    width: 100%; /* Full width of the viewport */
+    position: relative; /* Ensure the loader is centered within this container */
+}
+

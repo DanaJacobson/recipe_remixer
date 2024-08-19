@@ -3,61 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <title>Recipe Remixer</title>
-  <style>
-    body {
-      font-family: 'Lucida Handwriting', cursive;
-      background-color: #efe7e7;
-      margin: 0;
-      padding: 20px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    .container {
-      background-color: #ffffff;
-      padding: 50px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      width: 100%;
-      max-width: 300px;
-      text-align: center;
-    }
-    h1 {
-      font-size: 24px;
-      margin-bottom: 20px;
-    }
-    h2 {
-      font-size: 18px;
-      margin-bottom: 20px;
-      color: #555555;
-    }
-    .diet-option {
-      margin: 10px 0;
-      text-align: left;
-    }
-    button {
-      background-color: #efe7e7;
-      color: #464343;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-      margin-top: 20px;
-    }
-    button:hover {
-      background-color: #020101;
-    }
-    label {
-      cursor: pointer;
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css"> <!-- Link to external CSS file -->
 </head>
 <body>
   <div class="container">
-    <h1>Welcome to Recipe Remixer</h1>
-    <h2>Select the desired changes</h2>
+    <h1>Recipe Remixer</h1>
+    <h2>Select the desired changes:</h2>
     <form id="diet-form">
       <div class="diet-option">
         <input type="checkbox" id="vegan" name="diet" value="vegan">
