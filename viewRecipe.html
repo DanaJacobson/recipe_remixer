@@ -3,94 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <title>View Recipe</title>
-    <style>
-        body {
-            font-family: 'Lucida Handwriting', cursive;
-            background-color: #efe7e7;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
-        }
-        .container {
-            background-color: #ffffff;
-            padding: 50px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 600px;
-            text-align: center;
-            overflow-y: auto;
-            max-height: 80vh;
-            padding-bottom: 100px;
-        }
-        h1 {
-            font-size: 24px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        .recipe {
-            text-align: left;
-            white-space: pre-wrap;
-        }
-        ul {
-            list-style-type: disc;
-            margin-left: 20px;
-            padding-left: 20px;
-        }
-        h3 {
-            margin-top: 20px;
-        }
-        p {
-            margin-bottom: 20px;
-        }
-        img {
-            width: 80%;
-            max-width: 400px;
-            height: auto;
-            border-radius: 10px;
-            margin-top: 20px;
-        }
-        textarea {
-            width: 100%;
-            height: 100px;
-            margin-top: 20px;
-            padding: 10px;
-            font-size: 16px;
-            border-radius: 10px;
-            border: 1px solid #ccc;
-        }
-        .button-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 20px;
-        }
-        #saveComment {
-            margin-bottom: 10px;
-            padding: 8px 16px;
-            font-size: 14px;
-            cursor: pointer;
-        }
-        #backToLibrary {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to the shared CSS file -->
 </head>
 <body>
     <div class="container">
         <h1>Recipe</h1>
-        <div class="recipe" id="recipe"></div>
-        <img src="compressed_image.png" alt="Recipe Image">
+        <div class="recipe-content">
+            <img src="compressed_image.png" alt="Recipe Image" class="recipe-image">
+            <div class="recipe-text" id="recipe"></div>
+        </div>
+        <div class="instructions-container" id="instructions">
+        </div>
         <textarea id="comment" placeholder="Add your comment here:"></textarea>
         <div class="button-container">
-            <button id="saveComment">Save Comment</button>
-            <button id="backToLibrary">Back to Library</button>
+            <button class="button save-comment-button" id="saveComment">Save Comment</button>
+            <button class="button back-to-library-button" id="backToLibrary">Back to Library</button>
         </div>
     </div>
     <script src="viewRecipe.js"></script>
