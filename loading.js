@@ -3,8 +3,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Function to check for the modified recipe
   function checkForModifiedRecipe() {
-    chrome.storage.local.get(['recipeReady', 'modifiedRecipe'], (result) => {
-      if (result.recipeReady && result.modifiedRecipe) {
+    chrome.storage.local.get(['recipeReady', 'modifiedRecipe', 'imagePath'], (result) => {
+      if (result.recipeReady && result.modifiedRecipe && result.imagePath) {
         console.log('Modified recipe found in storage:', result.modifiedRecipe);
 
         // Remove the recipeReady flag

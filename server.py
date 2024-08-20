@@ -6,6 +6,7 @@ import json
 import openai
 import tinify
 from flask import Flask, request, jsonify, make_response
+import uuid
 
 load_dotenv()
 
@@ -114,11 +115,19 @@ def generate_dish_image(modified_recipe):
 
 
 # Function to compress the image from URL
-def compress_image(image_url, output_path):
+def compress_image(image_url, output_dir="images"):
+    # Generate a unique filename
+    unique_filename = str(uuid.uuid4()) + ".png"
+    output_path = os.path.join(output_dir, unique_filename)
+    
+    # Ensure the directory exists
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+    
     # Compress the image using TinyPNG
     source = tinify.from_url(image_url)
     source.to_file(output_path)
-
+    
     return output_path
 
 
@@ -160,7 +169,7 @@ def receive_url():
             if image_url:
                 print(f"Generated Image URL: {image_url}") #for testing
                 # Compress the image
-                compressed_image_path = compress_image(image_url, "compressed_image.png")
+                compressed_image_path = compress_image(image_url)
 
                 # Displaying the image path
                 absolute_path = os.path.abspath(compressed_image_path)

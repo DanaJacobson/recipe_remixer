@@ -35,9 +35,14 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     console.log('Received message in background script:', message); // Log the received message
     sendURLToServer(url, userRequest).then(response => {
       if (response.success) {
-        // Store the modified recipe in local storage
-        chrome.storage.local.set({ modifiedRecipe: response.data }, () => {
-          console.log('Modified recipe stored.');
+        const { modified_recipe, compressed_image_path } = response.data; // Adjust this based on your server response structure
+
+        // Store the modified recipe and image path in local storage
+        chrome.storage.local.set({
+          modifiedRecipe: { modified_recipe: modified_recipe },
+          imagePath: compressed_image_path
+        }, () => {
+          console.log('Modified recipe and image path stored.');
           // Set the flag indicating the recipe is ready
           chrome.storage.local.set({ recipeReady: true }, () => {
             console.log('RecipeReady flag set.');
