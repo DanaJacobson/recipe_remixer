@@ -9,12 +9,14 @@
     <div class="container">
         <h1>Recipe</h1>
         <div class="recipe-content">
-            <img src="compressed_image.png" alt="Recipe Image" class="recipe-image">
+            <div class="left-section">
+                <img src="compressed_image.png" alt="Recipe Image" class="recipe-image">
+                <textarea id="comment" placeholder="Add your comment here:"></textarea>
+            </div>
             <div class="recipe-text" id="recipe"></div>
         </div>
         <div class="instructions-container" id="instructions">
         </div>
-        <textarea id="comment" placeholder="Add your comment here:"></textarea>
         <div class="button-container">
             <button class="button save-comment-button" id="saveComment">Save Comment</button>
             <button class="button back-to-library-button" id="backToLibrary">Back to Library</button>
