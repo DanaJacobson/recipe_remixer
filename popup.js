@@ -1,6 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
   console.log('Popup loaded'); // Log when the popup is loaded
 
+    // Add event listener for the Recipe Library button
+    document.getElementById('recipeLibraryButton').addEventListener('click', function () {
+      window.location.href = 'library.html';  // Redirect to the library page
+  });
+
   const checkboxes = document.querySelectorAll('input[name="diet"]');
   checkboxes.forEach(checkbox => {
     checkbox.addEventListener('change', handleCheckboxChange);

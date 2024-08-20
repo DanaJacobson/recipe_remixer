@@ -237,3 +237,25 @@ textarea {
     align-items: center;
     margin-right: 20px;
 }
+
+/* Recipe Library Button Styles */
+.recipe-library-button {
+    position: absolute;
+    top: -10px;
+    right: 10px;
+    background-color: #f8af7f;
+    color: #f16304;
+    border: none;
+    padding: 6px 15px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 14px;
+    font-family: 'Roboto', sans-serif;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.recipe-library-button:hover {
+    background-color: #e65c00c9;
+    transform: scale(1.05);
+}
