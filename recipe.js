@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         console.log('Retrieved modifiedRecipe:', modifiedRecipe);
         console.log('Retrieved imagePath:', imagePath);
+        console.log('Retrieved recipeURL:', data.recipeURL);
 
         if (modifiedRecipe) {
             displayRecipe(modifiedRecipe, recipeElement);
@@ -30,16 +31,26 @@ document.addEventListener('DOMContentLoaded', () => {
         const recipeTitle = document.getElementById('recipe').querySelector('h1').textContent;
         const recipeContent = document.getElementById('recipe').innerHTML;
 
-        chrome.storage.local.get({ recipes: [] }, function (result) {
-            const recipes = result.recipes;
-            chrome.storage.local.get('imagePath', (data) => {
-                const imagePath = data.imagePath;
-                recipes.push({ title: recipeTitle, content: recipeContent, imagePath: imagePath });
+        chrome.storage.local.get('recipeURL', function(data) {
+            const recipeURL = data.recipeURL;
 
-                chrome.storage.local.set({ recipes: recipes }, function () {
-                    console.log('Recipe saved');
-                    alert('Recipe saved successfully!');
-                    window.location.href = 'library.html';
+            chrome.storage.local.get({recipes: [], recipeComments: {}}, function (result) {
+                const recipes = result.recipes;
+                const comments = result.recipeComments;
+                chrome.storage.local.get('imagePath', (data) => {
+                    const imagePath = data.imagePath;
+                    recipes.push({
+                        title: recipeTitle,
+                        content: recipeContent,
+                        imagePath: imagePath,
+                        url: recipeURL
+                    });
+
+                    chrome.storage.local.set({recipes: recipes, recipeComments: comments}, function () {
+                        console.log('Recipe and comments saved');
+                        alert('Recipe saved successfully!');
+                        window.location.href = 'library.html';
+                    });
                 });
             });
         });

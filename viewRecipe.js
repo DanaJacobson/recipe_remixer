@@ -1,11 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
-    chrome.storage.local.get(['selectedRecipe', 'selectedImagePath', 'recipeComments', 'recipeURL'], (data) => {
+    chrome.storage.local.get(['selectedRecipe', 'selectedImagePath', 'recipeURL', 'recipeComments'], (data) => {
         const recipeContent = data.selectedRecipe;
         const imagePath = data.selectedImagePath;
+        const recipeURL = data.recipeURL;
         const comments = data.recipeComments || {};
         const recipeElement = document.getElementById('recipe');
         const recipeImageElement = document.getElementById('recipeImage');
-        const recipeURL = data.recipeURL;
 
         if (recipeContent) {
             recipeElement.innerHTML = recipeContent;
@@ -19,9 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
             recipeImageElement.alt = 'No image available';
         }
 
-        console.log('Recipe URL:', recipeURL);
-        console.log('Comments for this recipe:', comments[recipeURL]);
-
+        // Display comments for the current recipe URL
         if (comments[recipeURL]) {
             comments[recipeURL].forEach(comment => {
                 const commentHtml = `<p><strong>My comment:</strong> ${comment}</p>`;
