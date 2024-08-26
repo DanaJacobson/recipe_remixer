@@ -39,10 +39,11 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
         // Store the modified recipe and image path in local storage
         chrome.storage.local.set({
+            recipeURL: url,
           modifiedRecipe: { modified_recipe: modified_recipe },
           imagePath: compressed_image_path
         }, () => {
-          console.log('Modified recipe and image path stored.');
+          console.log('Modified recipe URL, and image path stored.');
           // Set the flag indicating the recipe is ready
           chrome.storage.local.set({ recipeReady: true }, () => {
             console.log('RecipeReady flag set.');
@@ -89,3 +90,42 @@ async function sendURLToServer(url, userRequest) {
     return { success: false, error: error.message };
   }
 }
+
+function checkForModifiedRecipe() {
+    chrome.storage.local.get(['recipeReady', 'modifiedRecipe', 'imagePath'], (result) => {
+        if (result.recipeReady && result.modifiedRecipe && result.imagePath) {
+            console.log('Modified recipe found in storage:', result.modifiedRecipe);
+
+            // Remove the recipeReady flag
+            chrome.storage.local.remove('recipeReady', () => {
+                console.log('RecipeReady flag removed from storage');
+
+                // Notify the loading script to close the window
+                chrome.runtime.sendMessage({ type: 'closeLoadingWindow' });
+
+                // Open the new window with the recipe
+                openRecipeWindow();
+            });
+        } else {
+            console.log('Recipe not ready yet, polling again...');
+        }
+    });
+}
+
+function openRecipeWindow() {
+    chrome.windows.create({
+        url: chrome.runtime.getURL("recipe.html"),
+        type: "popup",
+        width: 500,
+        height: 600
+    }, (newWindow) => {
+        if (chrome.runtime.lastError) {
+            console.error('Error creating new window:', chrome.runtime.lastError);
+        } else {
+            console.log('New window opened:', newWindow);
+        }
+    });
+}
+
+// Start polling for the modified recipe
+setInterval(checkForModifiedRecipe, 1000);

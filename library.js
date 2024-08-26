@@ -26,7 +26,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     title.style.cursor = 'pointer'; 
                     title.addEventListener('click', function () {
                         // Store the selected recipe's HTML content and image path
-                        chrome.storage.local.set({ selectedRecipe: recipe.content, selectedImagePath: recipe.imagePath }, function () {
+                        chrome.storage.local.set({
+                            selectedRecipe: recipe.content,
+                            selectedImagePath: recipe.imagePath,
+                            recipeURL: recipe.url // Save the recipe URL here
+                        }, function () {
                             window.location.href = 'viewRecipe.html';
                         });
                     });
