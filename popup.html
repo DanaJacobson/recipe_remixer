@@ -6,6 +6,22 @@
   <link rel="stylesheet" href="styles.css"> <!-- Link to the shared CSS file -->
 </head>
 <body>
+  <div id="apiKeysModal" class="modal">
+    <div class="modal-content">
+      <h2>Enter Your API Keys:</h2>
+      <div class="api-key-instructions">
+        <p><strong>OpenAI API Key:</strong> Required to access the AI model for recipe modification. You can get your key from the <a href="https://platform.openai.com/account/api-keys" target="_blank">OpenAI Dashboard</a>.</p>
+        <input type="text" id="openaiKey" placeholder="OpenAI API Key" />
+      </div>
+      
+      <div class="api-key-instructions">
+        <p><strong>Tinify API Key:</strong> Required to compress images for faster loading. You can get your key from the <a href="https://tinypng.com/developers" target="_blank">TinyPNG Developer Dashboard</a>.</p>
+        <input type="text" id="tinifyKey" placeholder="Tinify API Key" />
+      </div>
+
+      <button id="saveKeysButton">Save Keys</button>
+    </div>
+  </div>
   <div class="container">
     <button class="recipe-library-button" id="recipeLibraryButton">Recipe Library</button> <!-- Updated Button -->
     <h1>Welcome to Recipe Remixer</h1>

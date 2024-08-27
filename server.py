@@ -10,20 +10,18 @@ import uuid
 
 load_dotenv()
 
-OPENAI_API_KEY = "sk-proj-cKlHZWTLnw3x3xCCa57oT3BlbkFJVFvsHVlzbbkI7DB8vjbr"
-client = openai.OpenAI(api_key=OPENAI_API_KEY)
-tinify.key = "48dwhSBSx7zbMzZkX9kT8pj6rkmwcmCJ"
 
-graph_config = {
-    "llm": {
-        "api_key": OPENAI_API_KEY,
-        "model": "gpt-3.5-turbo",
-    },
-}
 
 
 # Function to run the scraper
-def run_scraper(url):
+def run_scraper(url, openai_api_key):
+
+    graph_config = {
+    "llm": {
+        "api_key": openai_api_key,
+        "model": "gpt-3.5-turbo",
+        },
+    }      
     smart_scraper_graph = SmartScraperGraph(
         prompt="""You are an expert in web scraping and extracting information from web pages. I will provide you the source, 
         and you need to extract the recipe information from it. Please extract the following details:
@@ -42,7 +40,8 @@ def run_scraper(url):
     return result
 
 
-def modify_recipe(recipe_data, user_request):
+def modify_recipe(recipe_data, user_request, openai_api_key):
+    client = client = openai.OpenAI(api_key=openai_api_key)
     prompt = f"""
     You are a culinary expert. Here is a recipe I scraped:
 
@@ -92,7 +91,8 @@ def flatten_ingredients(ingredients_list):
 
 
 # Function to generate an image using DALL-E 2
-def generate_dish_image(modified_recipe):
+def generate_dish_image(modified_recipe, openai_api_key):
+    client = openai.OpenAI(api_key=openai_api_key)
     dish_name = modified_recipe.get("Name of the dish", "")
     ingredients = modified_recipe.get("List of ingredients", [])
     # Ensure ingredients is a list of strings
@@ -115,7 +115,8 @@ def generate_dish_image(modified_recipe):
 
 
 # Function to compress the image from URL
-def compress_image(image_url, output_dir="images"):
+def compress_image(image_url, tinify_api_key, output_dir="images"):
+    tinify.key = tinify_api_key
     # Generate a unique filename
     unique_filename = str(uuid.uuid4()) + ".png"
     output_path = os.path.join(output_dir, unique_filename)
@@ -155,21 +156,24 @@ def receive_url():
         data = request.get_json()
         url = data.get('url')
         user_request = data.get('request')
-        if url and user_request:
+        openai_api_key = data.get('openai_key')
+        tinify_api_key = data.get('tinify_key')
+        if url and user_request and openai_api_key and tinify_api_key:
             print(f"Received URL: {url}")
             print(f"User Request: {user_request}")
+            print("API keys received")
 
             # Run the scraper and modify the recipe
-            scraped_data = run_scraper(url)
-            modified_recipe = modify_recipe(scraped_data, user_request)
+            scraped_data = run_scraper(url, openai_api_key)
+            modified_recipe = modify_recipe(scraped_data, user_request, openai_api_key)
             print("Modified Recipe:\n", modified_recipe)
 
             # Generate image URL
-            image_url = generate_dish_image(modified_recipe)
+            image_url = generate_dish_image(modified_recipe, openai_api_key)
             if image_url:
                 print(f"Generated Image URL: {image_url}")  # for testing
                 # Compress the image
-                compressed_image_path = compress_image(image_url)
+                compressed_image_path = compress_image(image_url, tinify_api_key)
 
                 # Displaying the image path
                 absolute_path = os.path.abspath(compressed_image_path)

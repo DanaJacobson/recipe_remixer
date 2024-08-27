@@ -31,9 +31,9 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'sendRequest') {
-    const { url, userRequest } = message.data;
+    const { url, userRequest, openAIKey, tinifyKey } = message.data;
     console.log('Received message in background script:', message); // Log the received message
-    sendURLToServer(url, userRequest).then(response => {
+    sendURLToServer(url, userRequest, openAIKey, tinifyKey).then(response => {
       if (response.success) {
         const { modified_recipe, compressed_image_path } = response.data; // Adjust this based on your server response structure
 
@@ -61,7 +61,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 });
 
-async function sendURLToServer(url, userRequest) {
+async function sendURLToServer(url, userRequest, openAIKey, tinifyKey) {
   try {
     console.log('Sending URL and request to server:', url, userRequest);
 
@@ -70,7 +70,7 @@ async function sendURLToServer(url, userRequest) {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ url: url, request: userRequest })
+      body: JSON.stringify({ url: url, request: userRequest, openai_key: openAIKey, tinify_key: tinifyKey})
     });
 
     console.log('Server response status:', response.status);
