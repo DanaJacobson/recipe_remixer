@@ -23,17 +23,16 @@ def run_scraper(url, openai_api_key):
         },
     }      
     smart_scraper_graph = SmartScraperGraph(
-        prompt="""You are an expert in web scraping and extracting information from web pages. I will provide you the source, 
-        and you need to extract the recipe information from it. Please extract the following details:
+        prompt="""Please extract the following details from the recipe in the source:
 
         - Name of the dish
-        - List of ingredients
+        - List of ingredients (including the amount for each ingredient)
         - Instructions
         - Amount of servings
         - Cooking time
         """,
         source=url,
-        config=graph_config
+        config=graph_config,
     )
 
     result = smart_scraper_graph.run()
@@ -47,15 +46,21 @@ def modify_recipe(recipe_data, user_request, openai_api_key):
 
     {json.dumps(recipe_data, indent=2)}
 
-    The user has requested the following changes: {user_request}
+    The user has requested the following changes: make this recipe {user_request}
     Please provide a whole recipe, modified with proper alternative for the problematic ingredients. 
     Please provide the modified recipe in the same JSON format.
     For example, if the recipe includes cheese and the user request to change the recipe to vegan, give an alternative for the cheese.
     Try to provide an alternative that will be similar to the original recipe taste and texture.
+
+    Important:
+    - List the ingredients in plain text, with the amount included in the same string (e.g., "1 cup sugar").
+    - Do not use separate keys for "Ingredient" and "Amount" in the JSON.
+    - Ensure that the structure for ingredients and instructions is consistent and easy to read.
+
     The JSON should include the following details if present in the original recipe:
 
         - Name of the dish
-        - List of ingredients
+        - List of ingredients (including the emounts for each ingredient)
         - Instructions
         - Amount of servings
         - Cooking time
@@ -165,6 +170,7 @@ def receive_url():
 
             # Run the scraper and modify the recipe
             scraped_data = run_scraper(url, openai_api_key)
+            print("Scraped data:\n", scraped_data)
             modified_recipe = modify_recipe(scraped_data, user_request, openai_api_key)
             print("Modified Recipe:\n", modified_recipe)
 
