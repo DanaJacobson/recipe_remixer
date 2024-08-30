@@ -19,7 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
             recipeImageElement.alt = 'No image available';
         }
 
-        // Display comments for the current recipe URL
         if (comments[recipeURL]) {
             comments[recipeURL].forEach(comment => {
                 const commentHtml = `<p><strong>My comment:</strong> ${comment}</p>`;
@@ -46,6 +45,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     document.getElementById('comment').value = "";
                     alert('Comment saved!');
                     document.getElementById('recipe').scrollIntoView(false);
+
+                    chrome.runtime.sendMessage({
+                        type: 'trackEvent',
+                        category: 'Recipe',
+                        action: 'Comment Added',
+                        label: 'User added a comment'
+                    });
                 });
             });
         } else {

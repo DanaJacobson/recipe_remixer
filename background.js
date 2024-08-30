@@ -1,9 +1,23 @@
+function generateUniqueId() {
+    return 'user_' + Date.now() + '_' + Math.floor(Math.random() * 1000000);
+}
 chrome.runtime.onInstalled.addListener(() => {
-  chrome.contextMenus.create({
-    id: "recipeRemixer",
-    title: "Recipe Remixer",
-    contexts: ["page"]
-  });
+    chrome.storage.local.get('uniqueUserId', function(result) {
+        if (!result.uniqueUserId) {
+            const uniqueUserId = generateUniqueId();
+            chrome.storage.local.set({ uniqueUserId: uniqueUserId }, function() {
+                console.log('Generated and stored unique user ID:', uniqueUserId);
+            });
+        } else {
+            console.log('User ID already exists:', result.uniqueUserId);
+        }
+    });
+
+    chrome.contextMenus.create({
+        id: "recipeRemixer",
+        title: "Recipe Remixer",
+        contexts: ["page"]
+    });
 });
 
 chrome.contextMenus.onClicked.addListener((info, tab) => {
@@ -32,19 +46,17 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'sendRequest') {
     const { url, userRequest, openAIKey, tinifyKey } = message.data;
-    console.log('Received message in background script:', message); // Log the received message
+    console.log('Received message in background script:', message);
     sendURLToServer(url, userRequest, openAIKey, tinifyKey).then(response => {
       if (response.success) {
-        const { modified_recipe, compressed_image_path } = response.data; // Adjust this based on your server response structure
+        const { modified_recipe, compressed_image_path } = response.data;
 
-        // Store the modified recipe and image path in local storage
         chrome.storage.local.set({
             recipeURL: url,
-          modifiedRecipe: { modified_recipe: modified_recipe },
-          imagePath: compressed_image_path
+            modifiedRecipe: { modified_recipe: modified_recipe },
+            imagePath: compressed_image_path
         }, () => {
           console.log('Modified recipe URL, and image path stored.');
-          // Set the flag indicating the recipe is ready
           chrome.storage.local.set({ recipeReady: true }, () => {
             console.log('RecipeReady flag set.');
           });
@@ -57,7 +69,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       console.error('Error processing sendRequest:', error);
       sendResponse({ success: false, error: error.message });
     });
-    return true; // Indicates that we will respond asynchronously
+    return true;
   }
 });
 
@@ -96,14 +108,11 @@ function checkForModifiedRecipe() {
         if (result.recipeReady && result.modifiedRecipe && result.imagePath) {
             console.log('Modified recipe found in storage:', result.modifiedRecipe);
 
-            // Remove the recipeReady flag
             chrome.storage.local.remove('recipeReady', () => {
                 console.log('RecipeReady flag removed from storage');
 
-                // Notify the loading script to close the window
                 chrome.runtime.sendMessage({ type: 'closeLoadingWindow' });
 
-                // Open the new window with the recipe
                 openRecipeWindow();
             });
         } else {
@@ -127,5 +136,27 @@ function openRecipeWindow() {
     });
 }
 
-// Start polling for the modified recipe
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.type === 'trackEvent') {
+        sendAnalyticsEvent(message.category, message.action, message.label);
+    }
+});
+function sendAnalyticsEvent(category, action, label) {
+    chrome.storage.local.get('uniqueUserId', function(result) {
+        const clientId = result.uniqueUserId || 'unknown_client';
+        const trackingId = 'G-747LEMVQ4V';
+        const url = `https://www.google-analytics.com/collect?v=1&t=event&tid=${trackingId}&cid=${clientId}&ec=${encodeURIComponent(category)}&ea=${encodeURIComponent(action)}&el=${encodeURIComponent(label)}`;
+
+        fetch(url, { method: 'POST' })
+          .then(response => {
+              if (!response.ok) {
+                  console.error('Failed to send event to Google Analytics');
+              } else {
+                  console.log('Event sent successfully');
+              }
+          })
+          .catch(err => console.error('GA tracking failed', err));
+    });
+}
+
 setInterval(checkForModifiedRecipe, 1000);

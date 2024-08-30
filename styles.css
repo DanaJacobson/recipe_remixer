@@ -107,7 +107,6 @@ body {
     box-shadow: 0 4px 15px rgba(230, 92, 0, 0.5);
   }
 
-  /* Specific styles for the recipe page */
   .recipe-content {
     display: flex;
     justify-content: space-between;
@@ -119,7 +118,7 @@ body {
     width: 110px;
     height: 110px;
     border-radius: 10px;
-    object-fit: cover; /* Ensures the image fills the square without distortion */
+    object-fit: cover;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
   }
 
@@ -128,8 +127,8 @@ body {
     margin-left: 20px;
     text-align: left;
     overflow-y: auto;
-    max-height: 300px; /* Set max height to control the scroll */
-    width: 70%; /* Adjust the width to make this section wider */
+    max-height: 300px;
+    width: 70%;
 }
 
   .instructions-container {
@@ -155,7 +154,6 @@ body {
     color: #cc5200;
   }
 
-/* HTML: <div class="loader"></div> */
 .loader {
     width: 80px;
     height: 80px;
@@ -216,7 +214,7 @@ body {
     width: 100%;
     margin-top: 20px;
     overflow-y: auto;
-    max-height: 300px; /* Scrollable area for the recipe list */
+    max-height: 300px;
 }
 
 textarea {
@@ -254,7 +252,6 @@ textarea {
     transform: scale(0.8);
 }
 
-/* Recipe Library Button Styles */
 .recipe-library-button {
     position: absolute;
     top: -10px;
@@ -276,31 +273,29 @@ textarea {
     transform: scale(1.05);
 }
 
-/* Modal container */
 .modal {
-    display: none; /* Hidden by default */
+    display: none;
     position: fixed;
-    z-index: 1000; /* Sit on top */
+    z-index: 1000;
     left: 0;
     top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgba(0, 0, 0, 0.5); /* Black with opacity */
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
   }
   
-  /* Modal content */
   .modal-content {
     background-color: #fefefe;
-    margin: 15% auto; /* 15% from the top and centered */
+    margin: 15% auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 80%; /* Could be more or less, depending on screen size */
+    width: 80%;
     max-width: 400px;
     display: flex;
     flex-direction: column;
-    align-items: center; /* Center all content horizontally */
-    text-align: center; /* Center text alignment */
+    align-items: center;
+    text-align: center;
 }
   
   .modal-content h2 {

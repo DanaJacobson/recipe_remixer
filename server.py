@@ -1,5 +1,4 @@
 import os
-import sys
 from dotenv import load_dotenv
 from scrapegraphai.graphs import SmartScraperGraph
 import json
@@ -10,10 +9,6 @@ import uuid
 
 load_dotenv()
 
-
-
-
-# Function to run the scraper
 def run_scraper(url, openai_api_key):
 
     graph_config = {
@@ -83,7 +78,6 @@ def modify_recipe(recipe_data, user_request, openai_api_key):
     return modified_recipe_json
 
 
-# Function to flatten the ingredients list
 def flatten_ingredients(ingredients_list):
     flat_ingredients = []
     for item in ingredients_list:
@@ -95,12 +89,10 @@ def flatten_ingredients(ingredients_list):
     return flat_ingredients
 
 
-# Function to generate an image using DALL-E 2
 def generate_dish_image(modified_recipe, openai_api_key):
     client = openai.OpenAI(api_key=openai_api_key)
     dish_name = modified_recipe.get("Name of the dish", "")
     ingredients = modified_recipe.get("List of ingredients", [])
-    # Ensure ingredients is a list of strings
     ingredients_list = ', '.join(flatten_ingredients(ingredients))
     prompt = f"A delicious dish called {dish_name} made with the following ingredients: {ingredients_list}.. A high-quality, detailed, and appetizing image."
 
@@ -119,18 +111,14 @@ def generate_dish_image(modified_recipe, openai_api_key):
         return None
 
 
-# Function to compress the image from URL
 def compress_image(image_url, tinify_api_key, output_dir="images"):
     tinify.key = tinify_api_key
-    # Generate a unique filename
     unique_filename = str(uuid.uuid4()) + ".png"
     output_path = os.path.join(output_dir, unique_filename)
 
-    # Ensure the directory exists
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
-    # Compress the image using TinyPNG
     source = tinify.from_url(image_url)
     source.to_file(output_path)
 
@@ -168,20 +156,16 @@ def receive_url():
             print(f"User Request: {user_request}")
             print("API keys received")
 
-            # Run the scraper and modify the recipe
             scraped_data = run_scraper(url, openai_api_key)
             print("Scraped data:\n", scraped_data)
             modified_recipe = modify_recipe(scraped_data, user_request, openai_api_key)
             print("Modified Recipe:\n", modified_recipe)
 
-            # Generate image URL
             image_url = generate_dish_image(modified_recipe, openai_api_key)
             if image_url:
                 print(f"Generated Image URL: {image_url}")  # for testing
-                # Compress the image
                 compressed_image_path = compress_image(image_url, tinify_api_key)
 
-                # Displaying the image path
                 absolute_path = os.path.abspath(compressed_image_path)
                 print(f"Image available at: {absolute_path}")
                 print(f"To view the image, open the following path in an image viewer: {absolute_path}")
