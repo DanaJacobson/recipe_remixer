@@ -163,7 +163,7 @@ def receive_url():
 
             image_url = generate_dish_image(modified_recipe, openai_api_key)
             if image_url:
-                print(f"Generated Image URL: {image_url}")  # for testing
+                print(f"Generated Image URL: {image_url}")
                 compressed_image_path = compress_image(image_url, tinify_api_key)
 
                 absolute_path = os.path.abspath(compressed_image_path)
